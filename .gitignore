@@ -213,4 +213,9 @@ pip-selfcheck.json
 env/*
 venv/*
 .idea/*
+
+.vscode
+node_modules
+package-lock.json
+project
 # End of https://www.gitignore.io/api/python,pycharm
