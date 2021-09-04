@@ -95,3 +95,10 @@ class RegisterView(View):
         else:
             return HttpResponse("Passwords aren't matching") # temporary - will modify this later
  
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        
+        logout(request)
+
+        return redirect("index")
