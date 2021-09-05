@@ -2,9 +2,9 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth import authenticate, get_user_model, login, logout
-from django.contrib.auth.views import LoginView, FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from donating.models import Donation, Institution, CustomUser
+from donating.models import Category, Donation, Institution, CustomUser
 # Create your views here.
 
 User = get_user_model()
@@ -42,17 +42,23 @@ class LandingPageView(View):
         return render(request=request, template_name='index.html', context=context)
 
 
-class AddDonationView(View):
+class AddDonationView(LoginRequiredMixin, View):
+
+    login_url = '/login'
+
     def get(self, request, *args, **kwargs):
-        context = {}
+
+        categories = Category.objects.all()
+
+        context = {
+            'categories': categories
+        }
+        
         return render(request=request, template_name='form.html', context=context)
 
 
 class LoginView(View):
     def get(self, request, *args, **kwargs):
-        
-        # temporary
-        logout(request)
 
         context = {}
         return render(request=request, template_name='login.html', context=context)
@@ -69,7 +75,11 @@ class LoginView(View):
         user = authenticate(email=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect("index")
+            if self.request.GET.get('next'): 
+                return redirect(self.request.GET.get('next'))
+            else:
+                return redirect("index")
+
         else:
             return render(request, 'login.html')
 
