@@ -1,10 +1,21 @@
+from django import forms
+from django.forms.fields import ChoiceField
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
+
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
+
 
 from donating.models import Category, Donation, Institution, CustomUser
+from donating.serializers import DonationSerializer
+from donating.forms import DonationForm
 # Create your views here.
 
 User = get_user_model()
@@ -58,6 +69,49 @@ class AddDonationView(LoginRequiredMixin, View):
         
         return render(request=request, template_name='form.html', context=context)
 
+    def post(self, request, *args, **kwargs):
+
+        bags = request.POST.get('bags')
+        category_id = request.POST.get('categories')
+        organisation_id = request.POST.get('organisation')
+        address = request.POST.get('address')
+        phone_number = request.POST.get('phone')
+        city = request.POST.get('city')
+        zip_code = request.POST.get('postcode')
+        pick_up_date = request.POST.get('data')
+        pick_up_time = request.POST.get('time')
+        pick_up_comment = request.POST.get('more_info')
+        user = request.user
+
+        organisation = Institution.objects.get(id=organisation_id)
+        category = Category.objects.get(id=category_id)
+
+        donation = Donation.objects.create(
+            quantity=bags, 
+            institution=organisation,
+            address=address, 
+            phone_number=phone_number, 
+            city=city, 
+            zip_code=zip_code, 
+            pick_up_date=pick_up_date, 
+            pick_up_time=pick_up_time, 
+            pick_up_comment=pick_up_comment,
+            user=user,
+            )
+
+        donation.categories.add(category)
+        donation.save()
+
+        return redirect('success')
+
+
+
+class SuccessView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        context = {}
+        return render(request=request, template_name='form-confirmation.html', context=context) 
 
 class LoginView(View):
     def get(self, request, *args, **kwargs):
@@ -109,8 +163,21 @@ class RegisterView(View):
  
 
 class LogoutView(View):
+
     def get(self, request, *args, **kwargs):
         
         logout(request)
 
         return redirect("index")
+
+
+# class Donation2View(APIView):
+
+#         # parser_classes = [JSONParser]
+
+#         def put(self, request, id, format=None):
+#             donation = self.get_obje0w(donation, data=request.data)
+#             if serializer.is_valid():
+#                 serializer.save()
+#                 return Response(serializer.data)
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

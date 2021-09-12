@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
+
+
     {% if request.path == "/" %}
       <header class="header--main-page">
     {% elif request.path == "/donate/" %}
@@ -17,9 +19,7 @@
       <header> 
     {% endif %}
 
-    <!-- to bedzie wymagalo zmiany -->
     {% if user.is_authenticated %}
-    <!-- to bedzie wymagalo zmiany -->
 
       <nav class="container container--70">
         <ul class="nav--actions">

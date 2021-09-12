@@ -1,4 +1,22 @@
 document.addEventListener("DOMContentLoaded", function() {
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+
+  const csrftoken = getCookie('csrftoken');
   /**
    * HomePage - Help section
    */
@@ -235,6 +253,20 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$step.parentElement.hidden = this.currentStep >= 6;
 
       // TODO: get data from inputs and show them in summary
+      if (this.currentStep === 5) {
+        this.donationForm = document.getElementById("donation-form");
+        this.formData = new FormData(this.donationForm);
+
+        document.getElementById("number-bags").innerText = this.formData.get("bags") + ' worki ' + this.formData.get("categories");
+        document.getElementById("organisation").innerText = this.formData.get("organisation");
+        document.getElementById("street").innerText = this.formData.get("address");
+        document.getElementById("city").innerText = this.formData.get("city");
+        document.getElementById("zip-code").innerText = this.formData.get("postcode");
+        document.getElementById("phone-number").innerText = this.formData.get("phone");
+        document.getElementById("pickup-date").innerText = this.formData.get("data");
+        document.getElementById("pickup-time").innerText = this.formData.get("time");
+        document.getElementById("pickup-comment").innerText = this.formData.get("more_info");
+      }
     }
 
     /**
@@ -243,11 +275,32 @@ document.addEventListener("DOMContentLoaded", function() {
      * TODO: validation, send data to server
      */
     submit(e) {
-      e.preventDefault();
+      // e.preventDefault();
       this.currentStep++;
       this.updateForm();
+
+      // fetch('/success2/', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'X-CSRFToken': csrftoken,
+      //   },
+      //   body: JSON.stringify(this.formData),
+      //   credentials: "same-origin"
+      // })
+      // .then(response => {
+      //   response.json();
+      //   console.log(response.formData.arguments)
+      // })
+      // .then(data => {
+      //   console.log('Success:', data);
+      // })
+      // .catch((error) => {
+      //   console.error('Error:', error);
+      // });
     }
   }
+
   const form = document.querySelector(".form--steps");
   if (form !== null) {
     new FormSteps(form);
