@@ -15,7 +15,7 @@ from rest_framework.parsers import JSONParser
 
 from donating.models import Category, Donation, Institution, CustomUser
 from donating.serializers import DonationSerializer
-from donating.forms import DonationForm
+from donating.forms import DonationForm, UserForm
 # Create your views here.
 
 User = get_user_model()
@@ -169,6 +169,19 @@ class LogoutView(View):
         logout(request)
 
         return redirect("index")
+
+
+class UserView(View):
+
+    def get(self, request, *args, **kwargs):
+
+        user = request.user
+
+        form = UserForm(instance=user)
+
+        return render(request, template_name='user.html', context={'form': form})
+
+
 
 
 # class Donation2View(APIView):
