@@ -1,7 +1,8 @@
 from django import forms
+from django.db import models
 from django.forms import ModelForm
 
-from donating.models import Donation
+from donating.models import CustomUser, Donation
 
 class DonationForm(forms.Form):
     bags = forms.IntegerField() 
@@ -14,4 +15,10 @@ class DonationForm(forms.Form):
     pick_up_date = forms.DateField()
     pick_up_time = forms.TimeField()
     pick_up_comment = forms.CharField()
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'email']
 
