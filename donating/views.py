@@ -177,9 +177,23 @@ class UserView(View):
 
         user = request.user
 
+        user_donations_base = Donation.objects.filter(user=user)
+
+        user_donations = []
+        for user_donation in user_donations_base:
+            donation_categories = user_donation.categories.all()
+            user_donations.append((user_donation, donation_categories))
+
+
+
         form = UserForm(instance=user)
 
-        return render(request, template_name='user.html', context={'form': form})
+        context = {
+            'form': form,
+            'user_donations': user_donations,
+        }
+
+        return render(request, template_name='user.html', context=context)
 
 
 
