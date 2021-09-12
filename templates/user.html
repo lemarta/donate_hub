@@ -1,10 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form>
-    <div class="summary" style="padding: 50px; font-size: 20px;">
-        {% include 'base_form.html' %}
+<section class="help">
+    <div class="help--slides active" data-id="1">
+        <p>Twoje dane:</p>
+        <ul class="help--slides-items">
+            <form>
+                <div class="col" style="padding: 50px; font-size: 20px;">
+                    {% include 'base_form.html' %}
+                </div>
+            </form>
+        </ul>
     </div>
-</form>
-
+</section>
+<section class="help">
+    <div class="help--slides active" data-id="1">
+        <p>Twoje donacje:</p>
+        <ul class="help--slides-items">
+            {% for donation in user_donations %}
+                <li>
+                    <div class="col">
+                        <div class="title">Instytucja</div>
+                        <div class="subtitle">{{ donation.0.institution }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="title">Liczba worków</div>
+                        <div class="subtitle">{{ donation.0.quantity }}</div>
+                    </div>
+                    <div class="col">
+                        <div class="title">Kategorie</div>
+                        <div class="subtitle">
+                            {% for category in donation.1 %}
+                                <p>{{ category.name }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="title">Odbiór</div>
+                        <div class="subtitle">{{ donation.0.pick_up_date }} {{ donation.0.pick_up_time }}</div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
 {% endblock %}
