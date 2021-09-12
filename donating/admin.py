@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+import donating.models as donating_models
 
 # Register your models here.
 
 class CustomUserAdmin(UserAdmin):
-    model = CustomUser
+    model = donating_models.CustomUser
     list_display = ('email', 'is_staff', 'is_active',)
     list_filter = ('email', 'is_staff', 'is_active',)
     fieldsets = (
@@ -21,4 +21,7 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
 
-# admin.site.register(CustomUser, UserAdmin)
+admin.site.register(donating_models.CustomUser, CustomUserAdmin)
+admin.site.register(donating_models.Category)
+admin.site.register(donating_models.Institution)
+admin.site.register(donating_models.Donation)

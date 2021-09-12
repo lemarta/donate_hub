@@ -63,12 +63,18 @@ class CustomUser(AbstractUser):
 class Category(models.Model):
     name = models.CharField(max_length=256)
 
+    def __str__(self):
+        return self.name
+
 
 class Institution(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField()
     type = models.IntegerField(choices=TYPE_CHOICES, default=1)
     categories = models.ManyToManyField(Category)
+
+    def __str__(self):
+        return self.name
 
 
 class Donation(models.Model):
@@ -78,7 +84,7 @@ class Donation(models.Model):
     address = models.CharField(max_length=256)
     phone_number = models.PositiveIntegerField()
     city = models.CharField(max_length=256)
-    zip_code = models.PositiveSmallIntegerField()
+    zip_code = models.PositiveIntegerField()
     pick_up_date = models.DateField()
     pick_up_time = models.TimeField()
     pick_up_comment = models.CharField(max_length=1024)
