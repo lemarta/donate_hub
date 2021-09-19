@@ -275,29 +275,21 @@ document.addEventListener("DOMContentLoaded", function() {
      * TODO: validation, send data to server
      */
     submit(e) {
-      // e.preventDefault();
+      e.preventDefault();
       this.currentStep++;
       this.updateForm();
 
-      // fetch('/success2/', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'X-CSRFToken': csrftoken,
-      //   },
-      //   body: JSON.stringify(this.formData),
-      //   credentials: "same-origin"
-      // })
-      // .then(response => {
-      //   response.json();
-      //   console.log(response.formData.arguments)
-      // })
-      // .then(data => {
-      //   console.log('Success:', data);
-      // })
-      // .catch((error) => {
-      //   console.error('Error:', error);
-      // });
+
+      fetch('/upload/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': csrftoken,
+        },
+        body: this.formData,
+        credentials: "same-origin"
+      })
+
+      window.location.replace("/success");
     }
   }
 

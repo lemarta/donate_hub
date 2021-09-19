@@ -25,6 +25,6 @@ urlpatterns = [
     path('login/', donating_views.LoginView.as_view(), name='login'),
     path('logout/', donating_views.LogoutView.as_view(), name='logout'),
     path('register/', donating_views.RegisterView.as_view(), name='register'),
-    path('user-profile/', donating_views.UserView.as_view(), name='profile')
-    # path('success2/', donating_views.Donation2View.as_view(), name='success2'),
+    path('user-profile/', donating_views.UserView.as_view(), name='profile'),
+    path('upload/', donating_views.Donation2View.as_view(), name='upload'),
 ]

@@ -1,3 +1,4 @@
+from django.db.models import fields
 from rest_framework import serializers
 
 import donating.models as donating_models
@@ -17,5 +18,5 @@ class DonationSerializer(serializers.ModelSerializer):
             'pick_up_date',
             'pick_up_time',
             'pick_up_comment',
-            'user',
         ]
+
